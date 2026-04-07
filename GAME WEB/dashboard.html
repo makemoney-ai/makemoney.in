@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaming Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .header {
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .balance {
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+            box-shadow: 0 8px 30px rgba(34,197,94,0.4);
+        }
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .logout-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(239,68,68,0.4);
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .game-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .game-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .game-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+        .game-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: #22c55e;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .game-card { animation: fadeInUp 0.6s ease forwards; }
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+        .game-card:nth-child(5) { animation-delay: 0.5s; }
+        .game-card:nth-child(6) { animation-delay: 0.6s; }
+        .game-card:nth-child(7) { animation-delay: 0.7s; }
+        .game-card:nth-child(8) { animation-delay: 0.8s; }
+        .game-card:nth-child(9) { animation-delay: 0.9s; }
+        .game-card:nth-child(10){ animation-delay: 1.0s; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎮 Gaming Zone</h1>
+        <div class="balance">₹<span id="balanceAmount">1000</span></div>
+        <p>Welcome Gamer! Play & Win Coins!</p>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="games-grid">
+        <div class="game-card" onclick="openGame('tic-tac-toe')">
+            <div class="game-icon">❌⭕</div>
+            <div class="game-title">Tic Tac Toe</div>
+        </div>
+        <div class="game-card" onclick="openGame('snake')">
+            <div class="game-icon">🐍</div>
+            <div class="game-title">Snake Game</div>
+        </div>
+        <div class="game-card" onclick="openGame('rock-paper-scissors')">
+            <div class="game-icon">✊✋✌️</div>
+            <div class="game-title">Rock Paper Scissors</div>
+        </div>
+        <div class="game-card" onclick="openGame('memory')">
+            <div class="game-icon">🧠</div>
+            <div class="game-title">Memory Game</div>
+        </div>
+        <div class="game-card" onclick="openGame('quiz')">
+            <div class="game-icon">❓</div>
+            <div class="game-title">Quiz Game</div>
+        </div>
+        <div class="game-card" onclick="openGame('dice')">
+            <div class="game-icon">🎲</div>
+            <div class="game-title">Dice Game</div>
+        </div>
+        <div class="game-card" onclick="openGame('number-guess')">
+            <div class="game-icon">🎯</div>
+            <div class="game-title">Number Guess</div>
+        </div>
+        <div class="game-card" onclick="openGame('reaction')">
+            <div class="game-icon">⚡</div>
+            <div class="game-title">Reaction Speed</div>
+        </div>
+        <div class="game-card" onclick="openGame('color-match')">
+            <div class="game-icon">🎨</div>
+            <div class="game-title">Color Match</div>
+        </div>
+        <div class="game-card" onclick="openGame('racing')">
+            <div class="game-icon">🏎️</div>
+            <div class="game-title">Racing Game</div>
+        </div>
+    </div>
+
+    <script>
+        let balance = parseInt(localStorage.getItem('balance')) || 1000;
+        updateBalance();
+
+        function updateBalance() {
+            document.getElementById('balanceAmount').textContent = balance;
+            localStorage.setItem('balance', balance);
+        }
+
+        function logout() {
+            if(confirm('Logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        function openGame(gameName) {
+            window.location.href = `${gameName}.html`;
+        }
+    </script>
+</body>
+</html>

