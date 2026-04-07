@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .balance {
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .back-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(34,197,94,0.4);
+        }
+        canvas {
+            border: 3px solid #22c55e;
+            border-radius: 15px;
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .game-info {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="balance">Balance: ₹<span id="balance">1000</span></div>
+        <h1>🐍 Snake Game</h1>
+        <div>
+            <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+        </div>
+        <div class="game-info">
+            <div>Score: <span id="score">0</span></div>
+            <div>High Score: <span id="highScore">0</span></div>
+        </div>
+    </div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+
+        let snake = [
+            {x: 10, y: 10}
+        ];
+        let food = {};
+        let dx = 0;
+        let dy

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .balance {
+            background: linear-gradient(45deg, #22c55e, #16a34a);
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        .back-btn, .new-game-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover, .new-game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(34,197,94,0.4);
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+            margin: 20px 0;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 15px;
+            font-size: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cell:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+        .status {
+            font-size: 24px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .win-message {
+            color: #22c55e;
+            font-size: 28px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="balance">Balance: ₹<span id="balance">1000</span></div>
+        <h1>❌ Tic Tac Toe ⭕</h1>
+        <div>
+            <button class="back-btn" onclick="goBack()">← Back to Dashboard</button>
+            <button class="new-game-btn" onclick="newGame()">New Game</button>
+        </div>
+    </div>
+
+    <div class="status" id="status">Player X's turn</div>
+    <div class="board" id="board"></div>
+
+    <script>
+        let currentPlayer = 'X';
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+        let score = 0;
+
+        const balance = parseInt(new URLSearchParams(window.location.search).get('balance')) || 1000;
+        document.getElementById('balance').textContent = balance;
+
+        function createBoard() {
+            const boardEl = document.getElementById('board');
+            boardEl.innerHTML = '';
+            board.forEach((cell, index) => {
+                const cellEl = document.createElement('button');
+                cellEl.classList.add('cell');
+                cellEl.textContent = cell;
+                cellEl.addEventListener('click', () => makeMove(index));
+                boardEl.appendChild(cellEl);
+            });
+        }
+
+        function makeMove(index) {
+            if (board[index] !== '' || !gameActive) return;
+
+            board[index] = currentPlayer;
+            createBoard();
+
+            if (checkWin()) {
+                gameActive = false;
+                score += 50;
+                document.getElementById('status').innerHTML = `<span class="win-message">Player ${currentPlayer} wins! +₹50</span>`;
+                updateBalance(balance + 50);
+                return;
+            }
+
+            if (board.every(cell => cell !== '')) {
+                gameActive = false;
+                document.getElementById('status').textContent = 'Draw! Try again!';
+                return;
+            }
+
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            document.getElementById('status').textContent = `Player ${currentPlayer}'s turn`;
+        }
+
+        function checkWin() {
+            const winPatterns = [
+                [0,1,2], [3,4,5], [6,7,8],
+                [0,3,6], [1,4,7], [2,5,8],
+                [0,4,8], [2,4,6]
+            ];
+            return winPatterns.some(pattern => {
+                const [a,b,c] = pattern;
+                return board[a] && board[a] === board[b] && board[a] === board[c];
+            });
+        }
+
+        function newGame() {
+            currentPlayer = 'X';
+            board = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            document.getElementById('status').textContent = "Player X's turn";
+            createBoard();
+        }
+
+        function goBack() {
+            window.location.href = 'dashboard.html';
+        }
+
+        function updateBalance(newBalance) {
+            document.getElementById('balance').textContent = newBalance;
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>
